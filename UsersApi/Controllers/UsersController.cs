@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using UsersApi.Models;
+using UsersApi.Data;
 
 namespace UsersApi.Controllers
 {
@@ -7,50 +9,88 @@ namespace UsersApi.Controllers
     [Route("api/[controller]")]
     public class UsersController : ControllerBase
     {
-        private static List<string> users = new List<string> { "Alice", "Bob", "Charlie" };
+        private readonly AppDbContext _context;
 
-        //Get Users
+        public UsersController(AppDbContext context)
+        {
+            _context = context;
+        }
+
+        // Get all Users
         [HttpGet]
-        public IActionResult GetUsers()
+        public async Task<IActionResult> GetUsers()
         {
-            return Ok(users.ToList()); // LINQ: ToList() to get a new list.
+            // LINQ: Using ToListAsync() to asynchronously get all users from the database
+            var users = await _context.Users.ToListAsync(); 
+            return Ok(users);
         }
 
-        //Add a new User
+        // Add a new User
         [HttpPost]
-        public IActionResult AddUser([FromBody] string user)
+        public async Task<IActionResult> AddUser([FromBody] string name)
         {
-            if (string.IsNullOrEmpty(user))
-                return BadRequest("Nome de usuário inválido.");
+            if (string.IsNullOrEmpty(name))
+                return BadRequest("Invalid username.");
 
-            users = users.Append(user).ToList(); // LINQ: Append() adds a new element to the list.
-            return CreatedAtAction(nameof(GetUsers), new { name = user }, user);
+            var user = new User { Name = name };
+
+            // LINQ: Adding a new user to the DbSet. EF Core manages this operation internally using LINQ.
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync(); // Asynchronously save changes to the database
+
+            return CreatedAtAction(nameof(GetUsers), new { id = user.Id }, user);
         }
 
-        // Upadate a User
-        [HttpPut("{oldUser}")]
-        public IActionResult UpdateUser(string oldUser, [FromBody] string newUser)
+        // Update a User's name
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateUser(int id, [FromBody] string newName)
         {
-            if (!users.Any(u => u.Equals(oldUser, StringComparison.OrdinalIgnoreCase)))
-                return NotFound("Usuário não encontrado.");
+            // LINQ: Using Where() to find a user by ID
+            var user = await _context.Users
+                .Where(u => u.Id == id) // LINQ: Filter by user ID
+                .FirstOrDefaultAsync(); // LINQ: Get the first matching user or null if not found
 
-            users = users.Select(u => u.Equals(oldUser, StringComparison.OrdinalIgnoreCase) ? newUser : u).ToList();
-            // LINQ: Select() substitute the old user for the new one.
-            
+            if (user == null)
+                return NotFound("User not found.");
+
+            user.Name = newName;
+
+            // LINQ: EF Core will track the changes and update the user record
+            await _context.SaveChangesAsync(); 
+
+            return Ok(user);
+        }
+
+        // Delete a User
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteUser(int id)
+        {
+            // LINQ: Using Where() to find the user by ID
+            var user = await _context.Users
+                .Where(u => u.Id == id) // LINQ: Filter by user ID
+                .FirstOrDefaultAsync(); // LINQ: Get the first matching user or null if not found
+
+            if (user == null)
+                return NotFound("User not found.");
+
+            // LINQ: Using Remove() to delete the user from the DbSet (EF Core handles this with LINQ)
+            _context.Users.Remove(user); 
+            await _context.SaveChangesAsync(); // Save changes asynchronously to persist deletion
+
+            return NoContent();
+        }
+
+        // Search Users by name (example of LINQ filter)
+        [HttpGet("search")]
+        public async Task<IActionResult> GetUsersByName(string name)
+        {
+            // LINQ: Using Where() to filter users by name, with Contains() to find partial matches
+            var users = await _context.Users
+                .Where(u => u.Name.Contains(name)) // LINQ: Filter users by partial name match
+                .ToListAsync(); // LINQ: Convert the filtered results to a list
+
             return Ok(users);
         }
 
-        // Delete an User
-        [HttpDelete("{user}")]
-        public IActionResult DeleteUser(string user)
-        {
-            if (!users.Any(u => u.Equals(user, StringComparison.OrdinalIgnoreCase)))
-                return NotFound("Usuário não encontrado.");
-
-            users = users.Where(u => !u.Equals(user, StringComparison.OrdinalIgnoreCase)).ToList();
-            // LINQ: Where() filter the list to exclude the user.
-            
-            return Ok(users);
-        }
     }
 }

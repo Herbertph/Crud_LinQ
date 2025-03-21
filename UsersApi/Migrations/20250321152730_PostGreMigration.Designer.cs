@@ -11,8 +11,8 @@ using UsersApi.Data;
 namespace UsersApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250320173102_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250321152730_PostGreMigration")]
+    partial class PostGreMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -31,10 +31,6 @@ namespace UsersApi.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .IsRequired()
