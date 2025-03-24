@@ -8,23 +8,23 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Verifica se a chave JWT está configurada
+// Verify if the JWT Key is configured
 var jwtKey = builder.Configuration["Jwt:Key"];
 if (string.IsNullOrEmpty(jwtKey))
 {
     throw new Exception("JWT Key is not configured in appsettings.json");
 }
 
-// Configurações do banco de dados PostgreSQL
+// Configurations for the database
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Configuração da Identity
+// Configurations for Identity
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
 
-// Configuração da política de senhas (opcional para testes)
+// Configurations for Identity Password
 builder.Services.Configure<IdentityOptions>(options =>
 {
     options.Password.RequireDigit = false;
@@ -34,7 +34,7 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequireLowercase = false;
 });
 
-// Configuração da autenticação JWT
+// Configuration for JWT
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -52,23 +52,23 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddAuthorization();
 
-// Adiciona controllers e Swagger
+// Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configuração do Swagger
+// Configurations for Swagger
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-// Middleware de segurança
+// Configurations for the API
 app.UseHttpsRedirection();
-app.UseAuthentication(); // 🔴 Adicionado para autenticação funcionar corretamente
+app.UseAuthentication(); 
 app.UseAuthorization();
 
 app.MapControllers();

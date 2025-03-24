@@ -32,7 +32,7 @@ namespace UsersApi.Controllers
 
             if (result.Succeeded)
             {
-                return Ok(new { message = "Usuário registrado com sucesso!" });
+                return Ok(new { message = "User registered successfully!" });
             }
 
             return BadRequest(result.Errors);
@@ -44,7 +44,7 @@ namespace UsersApi.Controllers
             var user = await _userManager.FindByNameAsync(model.Username);
             if (user == null || !(await _userManager.CheckPasswordAsync(user, model.Password)))
             {
-                return Unauthorized(new { message = "Credenciais inválidas" });
+                return Unauthorized(new { message = "invalid credentials" });
             }
 
             var token = GenerateJwtToken(user);
