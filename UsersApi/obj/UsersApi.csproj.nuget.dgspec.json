@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\herbert.parasio\\Desktop\\Crud_LinQ\\UsersApi\\UsersApi.csproj": {}
+    "C:\\Users\\herbert.parasio\\Desktop\\Linq\\Crud_LinQ\\UsersApi\\UsersApi.csproj": {}
   },
   "projects": {
-    "C:\\Users\\herbert.parasio\\Desktop\\Crud_LinQ\\UsersApi\\UsersApi.csproj": {
+    "C:\\Users\\herbert.parasio\\Desktop\\Linq\\Crud_LinQ\\UsersApi\\UsersApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\herbert.parasio\\Desktop\\Crud_LinQ\\UsersApi\\UsersApi.csproj",
+        "projectUniqueName": "C:\\Users\\herbert.parasio\\Desktop\\Linq\\Crud_LinQ\\UsersApi\\UsersApi.csproj",
         "projectName": "UsersApi",
-        "projectPath": "C:\\Users\\herbert.parasio\\Desktop\\Crud_LinQ\\UsersApi\\UsersApi.csproj",
+        "projectPath": "C:\\Users\\herbert.parasio\\Desktop\\Linq\\Crud_LinQ\\UsersApi\\UsersApi.csproj",
         "packagesPath": "C:\\Users\\herbert.parasio\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\herbert.parasio\\Desktop\\Crud_LinQ\\UsersApi\\obj\\",
+        "outputPath": "C:\\Users\\herbert.parasio\\Desktop\\Linq\\Crud_LinQ\\UsersApi\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

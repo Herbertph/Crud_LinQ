@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "AAfOb9pj3T8=",
+  "dgSpecHash": "Jrx4ZviPohY=",
   "success": true,
-  "projectFilePath": "C:\\Users\\herbert.parasio\\Desktop\\Crud_LinQ\\UsersApi\\UsersApi.csproj",
+  "projectFilePath": "C:\\Users\\herbert.parasio\\Desktop\\Linq\\Crud_LinQ\\UsersApi\\UsersApi.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\herbert.parasio\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\herbert.parasio\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",
